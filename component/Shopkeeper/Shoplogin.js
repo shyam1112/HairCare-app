@@ -57,7 +57,7 @@ export default function Shoplogin() {
   }
 
   const registernow = () => {
-    console.warn('Register');
+    // console.warn('Register');
     navigation.navigate('shopregi');
   }
 

@@ -13,15 +13,17 @@ export default function Cushome() {
   useEffect(() => {
     getData();
   }, []);
-
+  
   const getData = async () => {
     try {
       let result = await fetch('https://haircare.onrender.com/getshopdata');
       if (!result.ok) {
         throw new Error('Network response was not ok');
       }
-      result = await result.json();
-      setData(result);
+      let data = await result.json();
+      // Slice the first 5 items from the data
+      let first5Items = data.slice(0, 6);
+      setData(first5Items);
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -29,7 +31,7 @@ export default function Cushome() {
       console.error('Error in fetching data:', error);
     }
   };
-
+  
 
   const searchdata = async (event) => {
     let key = event.toLowerCase();
@@ -49,7 +51,7 @@ export default function Cushome() {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.entername}>
-        <TextInput placeholder='Enter Yout Name' style={[styles.textinput]} value={name} onChangeText={(text) => setName(text)} />
+        <TextInput placeholder='Enter Yout Name' placeholderTextColor="#FFF" style={[styles.textinput]} value={name} onChangeText={(text) => setName(text)} />
       </View>
       <View style={styles.main}>
         <View style={styles.entername}>
@@ -66,9 +68,13 @@ export default function Cushome() {
                 <ShopItem item={item} name={name} />
               </View>
             ))
-          ) : (
+            
+            )
+          : (
             <Text>No data available</Text>
           )}
+          
+          {data && isLoading == false ? <Text style={{textAlign:'center'}}>& Many More .. </Text>:''} 
         </ScrollView>
       </View>
     </View>
@@ -81,7 +87,7 @@ const AccordionItem = ({ title, content }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <View style={styles.accordionItem}>
+    <View style={[styles.accordionItem,expanded?{backgroundColor:'#87CEF9',borderColor:'#87CEF9',borderWidth:4}:'']}>
       <TouchableOpacity
         style={styles.accordionHeader}
         onPress={() => setExpanded(!expanded)}
@@ -172,9 +178,8 @@ const ShopItem = ({ item, name }) => {
           <View style={{ flex: 1 }}>
 
             <View style={shopitem.acco} >
-              <Text style={shopitem.textlabel}> <Text style={{ fontWeight: '700' }}>Owner : </Text>{item.owner}</Text>
-              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Mobile Number :</Text> {item.mobilenumber}</Text>
-              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Address :</Text> {item.address}</Text>
+              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700'}}>Owner : </Text>{item.owner}</Text>
+              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Number :</Text> {item.mobilenumber}</Text>
               <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Address :</Text> {item.address}</Text>
 
               <View>
@@ -283,6 +288,8 @@ const shopitem = StyleSheet.create({
   dropdownContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop:-15,
+    marginBottom:-10,
   },
   dropdown: {
     width: 110, 
@@ -358,5 +365,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 15,
+    backgroundColor:'#EAEDED',
   },
 })

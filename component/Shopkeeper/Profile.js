@@ -50,10 +50,10 @@ export default function Profile() {
             </View>
             <View style={styles.container}>
               <Text style={styles.greetingText}>Hi!</Text>
-              <Text style={{color:'white',fontSize:16}}>owner: {data[0]?.owner || 'N/A'}</Text>
+              <Text style={{color:'black',fontSize:16}}>owner: {data[0]?.owner || 'N/A'}</Text>
               <Text style={styles.shopnameText}>Shopname: {data[0].shopname}</Text>
-              <Text style={{color:'white',fontSize:16}}>mobilenumber: {data[0]?.mobilenumber || 'N/A'}</Text>
-              <Text style={{color:'white',fontSize:16}}>address: {data[0]?.address || 'N/A'}</Text>
+              <Text style={{color:'black',fontSize:16}}>mobilenumber: {data[0]?.mobilenumber || 'N/A'}</Text>
+              <Text style={{color:'black',fontSize:16}}>address: {data[0]?.address || 'N/A'}</Text>
             </View>
           </View>
         )}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     height:510,
     marginTop: 20,
     padding: 20,
-    backgroundColor: 'rgb(13, 22, 31)',
+    backgroundColor: '#699B9E',
     borderRadius: 40,
   },
   cardImage: {

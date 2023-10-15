@@ -11,8 +11,7 @@ function Home() {
     }
     return (
         <View style={homestyle.mainpage1}>
-                  <StatusBar  hidden = {false} backgroundColor = "black"  translucent = {true}/>
-
+            <StatusBar  hidden={false} backgroundColor="black"  translucent={true}/>
 
             <View style={homestyle.mainpage} >
                 <Image
