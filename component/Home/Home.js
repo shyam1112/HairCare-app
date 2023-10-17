@@ -14,15 +14,23 @@ function Home() {
             <StatusBar  hidden={false} backgroundColor="black"  translucent={true}/>
 
             <View style={homestyle.mainpage} >
+                <View style={homestyle.homeimagegif}>
+
                 <Image
                     style={homestyle.homeimage}
-                    source={require('./shop.jpg')}
-                />
+                    source={require('./logo.gif')}
+                    />
+                    </View> 
+                    <View>
+                        <Text style={{textAlign:'center',marginTop:15,fontSize:25,color:'#F0C12E',fontWeight:'700'}}>Welcome to TrimTime</Text>
+                        <Text style={{textAlign:'center',marginTop:3,fontSize:13,color:'#fff',fontWeight:'400'}}>Your Style, Your Time, Your Way</Text>
+                    </View>
+
                 <Pressable onPress={customer}>
                     <Text style={homestyle.textbox1}>As a Customer</Text>
                 </Pressable>
                 <Pressable onPress={shopkeeper}>
-                    <Text style={homestyle.textbox2}>As a Shopkeeper</Text>
+                    <Text style={homestyle.textbox2}>As a Barber</Text>
                 </Pressable>
 
             </View>
@@ -30,17 +38,27 @@ function Home() {
     )
 }
 const homestyle = StyleSheet.create({
+ 
+    homeimagegif: {
+        width: 250,
+        height: 250,
+        marginTop: 20,
+        borderRadius: 125, 
+        alignSelf: 'center',
+        overflow: 'hidden',
+      },
     textbox1: {
         fontSize: 25,
         textAlign: 'center',
-        backgroundColor: 'black',
+        backgroundColor: '#BD973F',
         marginLeft: 30,
         marginRight: 30,
-        marginTop: 40,
-        borderRadius: 20,
+        marginTop: 50,
+        borderRadius: 50,
+        fontWeight:'400',
         padding: 10,
         alignItems: 'center',
-        color: 'white',
+        color: 'black',
         shadowColor:'blue',
         elevation:8,
         shadowOpacity:5,
@@ -50,36 +68,36 @@ const homestyle = StyleSheet.create({
     textbox2: {
         fontSize: 25,
         textAlign: 'center',
-        backgroundColor: 'black',
+        backgroundColor: '#BD973F',
         marginLeft: 30,
         marginRight: 30,
         marginTop: 30,
-        borderRadius: 20,
+        borderRadius: 50,
         padding: 10,
-        color: 'white',
+        color: 'black',
+        fontWeight:'400',
         shadowColor:'blue',
         elevation:8,
         shadowOpacity:5,
     },
-    mainpage: {
-        backgroundColor: '#84E7D9',
-        width: 300,
-        height: 480,
-        borderRadius: 20,
-        shadowColor:'black',
-        elevation:10,
-        shadowOpacity:5
-    },
     homeimage: {
         width: 250,
         height: 250,
-        marginLeft: 24,
-        marginTop: 20,
-        borderRadius: 25,
+        borderRadius: 125,
+        alignSelf:'center'
+    },
+    mainpage: {
+        backgroundColor: '#205887',
+        width: 330,
+        height: 580,
+        borderRadius: 50,
+        shadowColor:'black',
+        elevation:10,
+        shadowOpacity:5,
     },
     mainpage1:{
         flex: 1,
-        backgroundColor: '#DDEAFF',
+        backgroundColor: '#A6C3DE',
         alignItems: 'center',
         justifyContent: 'center',
     }

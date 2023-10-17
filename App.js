@@ -32,10 +32,14 @@ export default function App() {
         }}
       >
         <Stack.Screen
-          name="Home"
+          name="null"
           component={Home}
           options={{
-            title: 'Hair Care',
+            title: "✂️  TrimTime  ✂️",
+            headerStyle:{
+              backgroundColor:'#407CB5',
+            },
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
