@@ -32,8 +32,9 @@ export default function Cushome() {
     }
   };
   
-
+  const [search,setsearch]=useState('');
   const searchdata = async (event) => {
+    setsearch(event);
     let key = event.toLowerCase();
     if (key) {
       let result = await fetch(`https://haircare.onrender.com/search/${key}`);
@@ -74,7 +75,7 @@ export default function Cushome() {
             <Text>No data available</Text>
           )}
           
-          {data && isLoading == false ? <Text style={{textAlign:'center'}}>& Many More .. </Text>:''} 
+          {!search && data && isLoading == false ? <Text style={{textAlign:'center'}}>& Many More .. </Text>:''} 
         </ScrollView>
       </View>
     </View>
@@ -316,11 +317,11 @@ const styles = StyleSheet.create({
   searchinput: {
     fontSize: 20,
     color: 'black',
-    width: 250,
+    width: 280,
     borderWidth: 2,
     padding: 7,
     paddingLeft: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     marginTop: 20,
     textAlignVertical: "center",
     backgroundColor: 'white',

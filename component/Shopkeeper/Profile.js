@@ -44,16 +44,16 @@ export default function Profile() {
           <View style={styles.card}>
             <View style={styles.cardImage}>
               <Image
-                source={{ uri: 'https://www.w3schools.com/howto/img_avatar.png' }}
+                source={require('./16365064.jpg')}
                 style={styles.image}
               />
             </View>
             <View style={styles.container}>
               <Text style={styles.greetingText}>Hi!</Text>
-              <Text style={{color:'black',fontSize:16}}>owner: {data[0]?.owner || 'N/A'}</Text>
+              <Text style={{color:'#BD973F',fontSize:16}}>owner: {data[0]?.owner || 'N/A'}</Text>
               <Text style={styles.shopnameText}>Shopname: {data[0].shopname}</Text>
-              <Text style={{color:'black',fontSize:16}}>mobilenumber: {data[0]?.mobilenumber || 'N/A'}</Text>
-              <Text style={{color:'black',fontSize:16}}>address: {data[0]?.address || 'N/A'}</Text>
+              <Text style={{color:'#BD973F',fontSize:16}}>mobilenumber: {data[0]?.mobilenumber || 'N/A'}</Text>
+              <Text style={{color:'#BD973F',fontSize:16}}>address: {data[0]?.address || 'N/A'}</Text>
             </View>
           </View>
         )}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     height:510,
     marginTop: 20,
     padding: 20,
-    backgroundColor: '#699B9E',
+    backgroundColor: '#205887',
     borderRadius: 40,
   },
   cardImage: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     color:'white',
   },
   shopnameText: {
-    fontSize: 22,
+    fontSize: 15,
     fontWeight: 'bold',
     color:'white',
   },
