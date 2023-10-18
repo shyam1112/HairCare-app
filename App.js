@@ -10,6 +10,7 @@ import { Button, View, StyleSheet, TouchableOpacity, Text,StatusBar } from 'reac
 import AddData from './component/Shopkeeper/AddData';
 import RequestAccept from './component/Shopkeeper/RequestAccept';
 import Profile from './component/Shopkeeper/Profile';
+import Shopdata from './component/Customer/Shopdata';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +70,13 @@ export default function App() {
           component={Shopregistration}
           options={{
             title: 'Hair Care - Registration',
+          }}
+        />
+        <Stack.Screen
+          name="shopdata"
+          component={Shopdata}
+          options={{
+            title: 'Barber Shop',
           }}
         />
 {/* 

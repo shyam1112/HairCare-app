@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { View, Text, TextInput, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ToastAndroid, Image,ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Cushome() {
@@ -13,7 +13,7 @@ export default function Cushome() {
   useEffect(() => {
     getData();
   }, []);
-  
+
   const getData = async () => {
     try {
       let result = await fetch('https://haircare.onrender.com/getshopdata');
@@ -31,8 +31,8 @@ export default function Cushome() {
       console.error('Error in fetching data:', error);
     }
   };
-  
-  const [search,setsearch]=useState('');
+
+  const [search, setsearch] = useState('');
   const searchdata = async (event) => {
     setsearch(event);
     let key = event.toLowerCase();
@@ -60,22 +60,23 @@ export default function Cushome() {
         </View>
         <ScrollView style={styles.container}>
           {isLoading ? (
-            <Text>Loading...</Text>
+            // <Text>Loading...</Text>
+            <ActivityIndicator size={"large"} color={"blue"}  />
           ) : error ? (
             <Text>Error: {error.message}</Text>
           ) : data && data.length > 0 ? (
             data.map((item) => (
               <View key={item._id}>
-                <ShopItem item={item} name={name} />
+                <AccordionItem item={item} name={name} />
               </View>
             ))
-            
-            )
-          : (
-            <Text>No data available</Text>
-          )}
-          
-          {!search && data && isLoading == false ? <Text style={{textAlign:'center'}}>& Many More .. </Text>:''} 
+
+          )
+            : (
+              <Text>No data available</Text>
+            )}
+
+          {!search && data && isLoading == false ? <Text style={{ textAlign: 'center' }}>& Many More .. </Text> : ''}
         </ScrollView>
       </View>
     </View>
@@ -84,222 +85,69 @@ export default function Cushome() {
 }
 
 
-const AccordionItem = ({ title, content }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <View style={[styles.accordionItem,expanded?{backgroundColor:'#87CEF9',borderColor:'#87CEF9',borderWidth:4}:'']}>
-      <TouchableOpacity
-        style={styles.accordionHeader}
-        onPress={() => setExpanded(!expanded)}
-      >
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.icon}>{expanded ? '▼' : '▶'}</Text>
-      </TouchableOpacity>
-      {expanded && <View style={styles.content}>{content}</View>}
-    </View>
-  );
-};
-
-
-const ShopItem = ({ item, name }) => {
-  const [requestSent, setRequestSent] = useState(false);
-  const [rsp, setRsp] = useState('Best of luck');
-  const [selectedHour, setSelectedHour] = useState(10);
-  const [selectedMinute, setSelectedMinute] = useState(0);
-  const [selectedAmPm, setSelectedAmPm] = useState('AM');
-
-  const hours = Array.from({ length: 12 }, (_, i) => i + 1);
-  const minutes = [0, 15, 30, 45];
-  const ampmOptions = ['AM', 'PM'];
-
-  
-  const sendreq = async (userId) => {
-    if (name === '') {
-      // console.warn({ userid });
-      ToastAndroid.show('Enter Your Name :)', ToastAndroid.TOP);
-      return;
+const AccordionItem = ({ item, name }) => {
+  const navigation=useNavigation();
+  const toshopdata=()=>{
+    if(name == ''){
+      return console.warn("Enter Name :)");
     }
-    
-  let idd;  
-  const reqee = false;
-    const timee =selectedHour+':'+selectedMinute+':'+selectedAmPm;
-    // console.log(timee)
-
-    try {
-      const response = await fetch('https://haircare.onrender.com/sendreq', {
-        method: 'POST',
-        body: JSON.stringify({ userId, name, timee, reqee }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        idd = data.id;
-        ToastAndroid.show('Request sent Successfully...done 😃!', ToastAndroid.TOP);
-        setRequestSent(true);
-        setRsp('Confirm');
-      } else {
-        ToastAndroid.show('Request failed. Please try again later.', ToastAndroid.TOP);
-      }
-    } catch (error) {
-      ToastAndroid.show('Error sending data',ToastAndroid.TOP);
-      console.error('Error sending data', error); 
-    }
- 
-    setTimeout(async () => {
-      try {
-        let result = await fetch(`https://haircare.onrender.com/accept/${idd}`);
-        if (!result.ok) {
-          throw new Error('Network response was not ok');
-        }
-        result = await result.json();
-        if (result.reqee === true) {
-          setRsp('Confirm');
-        } else {
-          setRsp('Select Another time..');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setRequestSent(false);
-      }
-    }, 15000);
+    navigation.navigate('shopdata',{id:item._id,name:name});
   }
-
 
   return (
 
     <View>
-      <AccordionItem
-        title={item.shopname}
-        content={
-          <View style={{ flex: 1 }}>
-
-            <View style={shopitem.acco} >
-              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700'}}>Owner : </Text>{item.owner}</Text>
-              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Number :</Text> {item.mobilenumber}</Text>
-              <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Address :</Text> {item.address}</Text>
-
-              <View>
-                <View style={shopitem.container}>
-                  <Text  style={{ fontWeight: '700' }}>Select Time:</Text>
-
-                  <View style={shopitem.dropdownContainer}>
-                    <View style={{width:40,overflow:'hidden',flexDirection:'row'}} >
-
-                    <Picker
-                      selectedValue={selectedHour}
-                      onValueChange={(value) => setSelectedHour(value)}
-                      style={shopitem.dropdown}
-                      >
-                      {hours.map((hour) => (
-                        <Picker.Item key={hour} label={hour.toString()} value={hour} />
-                        ))}
-                    </Picker>
-                    </View>
-
-                    <Text> :</Text>
-                    <View style={{width:40,overflow:'hidden',flexDirection:'row'}} >
-
-                    <Picker
-                      selectedValue={selectedMinute}
-                      onValueChange={(value) => setSelectedMinute(value)}
-                      style={shopitem.dropdown}
-                    >
-                      {minutes.map((minute) => (
-                        <Picker.Item key={minute} label={minute.toString()} value={minute} />
-                      ))}
-                    </Picker>
-                    </View>
-                    
-                    <Text> :</Text>
-                    <View style={{width:40,overflow:'hidden',flexDirection:'row'}} >
-
-                    <Picker
-                      selectedValue={selectedAmPm}
-                      onValueChange={(value) => setSelectedAmPm(value)}
-                      style={shopitem.dropdown}
-                    >
-                      {ampmOptions.map((ampm) => (
-                        <Picker.Item key={ampm} label={ampm} value={ampm} />
-                      ))}
-                    </Picker>
-                    </View>
-
-                  </View>
-
-                  <Text>
-                    Selected Time: {selectedHour}:{selectedMinute} {selectedAmPm}
-                  </Text>
-                </View>
-              </View>
+      <View style={styles.shopdatamain}>
+        <TouchableOpacity onPress={toshopdata}>
+          <View style={styles.shoptitle}>
+            <View>
+              <Image
+                source={require('./splash.png')}
+                style={styles.imageicon}
+              />
             </View>
-            {requestSent?(
-              <Text style={{color:'red'}}>Waiting ...</Text>
-            ):(
-              <View>
-
-              {rsp !== 'Confirm' ?(
-                <Pressable onPress={() => sendreq(item.userId)}>
-                <View style={shopitem.reqbtn}>
-                <Text style={{ textAlign: 'center', fontSize: 15 }}>Send Request</Text>
-                </View>
-                </Pressable>):""}
-                {rsp === 'Confirm'?(
-                  <Text style={{backgroundColor:'green',borderRadius:10,color:'white',fontWeight:'600',width:290,textAlign:'center',height:40,textAlignVertical:'center',marginTop:10}}>Confirm</Text>
-                ):''}
-              
-                
-                </View>
-              )
-            }
+            <View>
+              <Text style={{ fontSize: 20 }}>{item.shopname}</Text>
+              <Text>Hair cut</Text>
+            </View>
           </View>
-        }
-      />
+        </TouchableOpacity>
+      </View>
+
     </View>
-  )
 
-}
-
-
-const shopitem = StyleSheet.create({
-  textlabel: {
-    fontSize: 15,
-  },
-  reqbtn: {
-    marginTop: 10,
-    backgroundColor: '#089DF8',
-    width: 110,
-    height: 35,
-    borderRadius: 7,
-    shadowColor: 'black',
-    elevation: 10,
-    shadowOpacity: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    // alignItems: 'center',
-  },
-  dropdownContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop:-15,
-    marginBottom:-10,
-  },
-  dropdown: {
-    width: 110, 
-  },
-})
+  );
+};
 
 
 
 const styles = StyleSheet.create({
+  imageicon: {
+    width: 50,
+    height: 50,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 20,
+    marginTop:6,
+    marginBottom:6,
+
+  },
+  shoptitle: {
+    // backgroundColor:'red',
+    width: 300,
+    height: 60,
+    alignItems: 'center',
+    borderRadius: 20,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    marginBottom:10,
+    borderWidth:0.3,
+
+  },
+  shopdatamain: {
+    alignSelf: 'center',
+    flex: 1,
+  },
   textinput: {
     backgroundColor: '#2C3E50',
     fontSize: 20,
@@ -366,6 +214,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 15,
-    backgroundColor:'#EAEDED',
+    backgroundColor: '#EAEDED',
   },
+
 })
