@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "HairCare",
+    "name": "Trim Time",
     "slug": "HairCare",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.shyamsardhara.HairCare"
+      "package": "com.shyamsardhara.HairCare",
+      "useNextNotificationsApi":true
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { View, Text, TextInput, TouchableOpacity, ScrollView, ToastAndroid, Image,ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image,ActivityIndicator ,ToastAndroid} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -88,8 +88,9 @@ export default function Cushome() {
 const AccordionItem = ({ item, name }) => {
   const navigation=useNavigation();
   const toshopdata=()=>{
-    if(name == ''){
-      return console.warn("Enter Name :)");
+    if(name === ''){
+       ToastAndroid.show("Enter Name :)",ToastAndroid.TOP);
+       return;
     }
     navigation.navigate('shopdata',{id:item._id,name:name});
   }

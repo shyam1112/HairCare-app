@@ -49,11 +49,10 @@ const ShopItem = ({ item, name }) => {
 
 
   const sendreq = async (userId) => {
-    if (name === '') {
-      // console.warn({ userid });
-      ToastAndroid.show('Enter Your Name :)', ToastAndroid.TOP);
-      return;
-    }
+    // if (name === '') {
+    //   ToastAndroid.show('Enter Your Name :)', ToastAndroid.TOP);
+    //   return;
+    // }
 
     let idd;
     const reqee = false;

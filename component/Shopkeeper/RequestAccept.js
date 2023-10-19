@@ -1,14 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ToastAndroid, Pressable,ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid, Pressable, ScrollView, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true
+    }
+  }
+})
 
 export default function RequestAccept() {
+
+  const triggerNotifications = async () => {
+    // Request permission and schedule a local notification
+    const { granted } = await Notifications.requestPermissionsAsync();
+    if (granted) {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "You've Got a Request! 📬",
+          body: "Act quickly and choose a suitable time to accept the request!",
+          sound: 'default',
+          data: { data: "goes here" },
+        },
+        trigger: null,
+      });
+    } else {
+      console.log('Notification permissions not granted');
+    }
+  }
+
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
-
 
   useEffect(() => {
     fetchData();
@@ -81,48 +108,46 @@ export default function RequestAccept() {
 
   return (
     <View style={styles.container}>
-      {/* <Text>Retrieved Data: {auth}</Text>  */}
-
       <ScrollView>
-      {isLoading ? (
-        <Text>Loading...</Text>
-      ) : error ? (
-        <Text>Error: {error.message}</Text>
-      ) :
-        data && data.length > 0 ? (
-          data.map((item, index) => (
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>Error: {error.message}</Text>
+        ) :
+          data && data.length > 0 ? (
+            data.map((item, index) => (
 
-            <View style={styles.boxmain} key={item._id}>
-              <View style={styles.textt}>
-                <Text style={styles.name} >{item.name}</Text>
-                <Text style={styles.time}>{item.timee}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+              <View style={styles.boxmain} key={item._id}>
+                <View style={styles.textt}>
+                  <Text style={styles.name} >{item.name}</Text>
+                  <Text style={styles.time}>{item.timee}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
 
-                {!acceptedRequests.includes(item._id) ? (
-                  <Pressable onPress={() => acceptreq(item._id)}>
-                    <View style={styles.acceptreq}>
-                      <Text style={{ color: 'white', fontSize: 17, fontWeight: 400 }}>Accept Request</Text>
+                  {!acceptedRequests.includes(item._id) ? (
+                    <Pressable onPress={() => acceptreq(item._id)}>
+                      <View style={styles.acceptreq}>
+                        <Text style={{ color: 'white', fontSize: 17, fontWeight: 400 }}>Accept Request</Text>
+                      </View>
+                    </Pressable>
+                  ) : (
+                    <View style={styles.done}>
+                      <Text style={{ fontSize: 17, fontWeight: 500 }}>Done</Text>
+                    </View>
+                  )}
+
+                  <Pressable onPress={() => deletereq(item._id)}>
+                    <View style={styles.deletereq}>
+                      <Text style={{ fontWeight: '500', color: 'white' }}>Delete</Text>
                     </View>
                   </Pressable>
-                ) : (
-                  <View style={styles.done}>
-                    <Text style={{ fontSize: 17, fontWeight: 500 }}>Done</Text>
-                  </View>
-                )}
 
-                <Pressable onPress={() => deletereq(item._id)}>
-                  <View style={styles.deletereq}>
-                    <Text style={{ fontWeight: '500', color: 'white' }}>Delete</Text>
-                  </View>
-                </Pressable>
-
+                </View>
               </View>
-            </View>
-          ))) : (
-          <Text>No Data</Text>
-        )
-      }
+            ))) : (
+            <Text>No Data</Text>
+          )
+        }
       </ScrollView>
     </View>
   );
@@ -133,7 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginTop: 25,
     alignItems: 'center',
-    marginBottom:20,
+    marginBottom: 20,
   },
   textt: {
     // backgroundColor:'red',
@@ -147,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
   },
   name: {
     fontSize: 20,

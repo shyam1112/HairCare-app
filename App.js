@@ -12,14 +12,15 @@ import RequestAccept from './component/Shopkeeper/RequestAccept';
 import Profile from './component/Shopkeeper/Profile';
 import Shopdata from './component/Customer/Shopdata';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  return (
   
-    
+
+  return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -47,14 +48,14 @@ export default function App() {
           name="cushome"
           component={Cushome}
           options={{
-            title: 'Hair Care - Customer',
+            title: 'Trim Time - Customer',
           }}
         />
         <Stack.Screen
           name="shoplogin"
           component={Shoplogin}
           options={{
-            title: 'Hair Care - Login',
+            title: 'Trim Time - Login',
           }}
         />
         <Stack.Screen
@@ -62,14 +63,14 @@ export default function App() {
           component={Shophome}
           
           options={() => ({
-            title: 'Hair Care - Home',
+            title: 'Trim Time - Home',
           })}
         />
         <Stack.Screen
           name="shopregi"
           component={Shopregistration}
           options={{
-            title: 'Hair Care - Registration',
+            title: 'Trim Time - Registration',
           }}
         />
         <Stack.Screen
