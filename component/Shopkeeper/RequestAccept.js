@@ -6,7 +6,8 @@ import * as Notifications from 'expo-notifications';
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
-      shouldShowAlert: true
+      shouldShowAlert: true,
+      shouldPlaySound: true
     }
   }
 })
@@ -14,7 +15,7 @@ Notifications.setNotificationHandler({
 export default function RequestAccept() {
 
   const triggerNotifications = async () => {
-    // Request permission and schedule a local notification
+
     const { granted } = await Notifications.requestPermissionsAsync();
     if (granted) {
       await Notifications.scheduleNotificationAsync({
@@ -36,25 +37,36 @@ export default function RequestAccept() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
+  const [lastDataLength, setLastDataLength] = useState(0); 
+  const [hasStartedPolling, setHasStartedPolling] = useState(false);
 
   useEffect(() => {
     fetchData();
+    
     const pollInterval = 3000;
     const pollTimer = setInterval(fetchData, pollInterval);
-
     return () => clearInterval(pollTimer);
   }, []);
+  
+  useEffect(() => {
+    if (hasStartedPolling  && data.length > lastDataLength) {
+      console.log('added...');
+      triggerNotifications();
+      setLastDataLength(data.length);
+    }
+    if (!hasStartedPolling) {
+      setHasStartedPolling(true);
+    }
+  }, [data, lastDataLength, hasStartedPolling]); 
 
   const fetchData = async () => {
     let auth;
 
     try {
       auth = await AsyncStorage.getItem('userid');
-      // console.log(auth);
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
-    // console.log(auth);
     try {
       let result = await fetch(`https://haircare.onrender.com/getreq/${auth}`);
       if (!result.ok) {
@@ -71,9 +83,10 @@ export default function RequestAccept() {
   };
 
 
+
+
+
   const acceptreq = async (id) => {
-
-
     try {
       let result = await fetch(`https://haircare.onrender.com/update/${id}`, {
         method: 'put',
@@ -93,6 +106,7 @@ export default function RequestAccept() {
 
   const deletereq = async (id) => {
     try {
+      setLastDataLength(data.length-1); 
       let result = await fetch(`https://haircare.onrender.com/deletereq/${id}`, {
         method: 'delete'
       });
@@ -115,11 +129,14 @@ export default function RequestAccept() {
           <Text>Error: {error.message}</Text>
         ) :
           data && data.length > 0 ? (
-            data.map((item, index) => (
-
+            data.map((item, index) => {
+              return(
+                
               <View style={styles.boxmain} key={item._id}>
                 <View style={styles.textt}>
                   <Text style={styles.name} >{item.name}</Text>
+                  <Text style={styles.name} >{data.length}</Text>
+                  <Text style={styles.name} >{lastDataLength}</Text>
                   <Text style={styles.time}>{item.timee}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
@@ -144,7 +161,7 @@ export default function RequestAccept() {
 
                 </View>
               </View>
-            ))) : (
+              )})) : (
             <Text>No Data</Text>
           )
         }
