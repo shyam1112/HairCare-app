@@ -11,15 +11,15 @@ export default function Shoplogin() {
   const [btn, setbtn] = useState(false);
 
   useEffect(() => {
-    // AsyncStorage.getItem('userid')
-    //   .then((auth) => {
-    //     if (auth) {
-    //       navigation.navigate('shophome');
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error retrieving data:', error);
-    //   });
+    AsyncStorage.getItem('userid')
+      .then((auth) => {
+        if (auth) {
+          navigation.navigate('shophome');
+        }
+      })
+      .catch((error) => {
+        console.error('Error retrieving data:', error);
+      });
   }, []);
 
 
