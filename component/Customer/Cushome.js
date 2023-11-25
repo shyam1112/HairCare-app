@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image,ActivityIndicator ,ToastAndroid} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, ActivityIndicator, ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import Homedesign from './Homedesign';
 
 export default function Cushome() {
   const [name, setName] = useState('');
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -15,21 +14,21 @@ export default function Cushome() {
   }, []);
 
   const getData = async () => {
-    try {
-      let result = await fetch('https://haircare.onrender.com/getshopdata');
-      if (!result.ok) {
-        throw new Error('Network response was not ok');
-      }
-      let data = await result.json();
-      // Slice the first 5 items from the data
-      let first5Items = data.slice(0, 6);
-      setData(first5Items);
-      setIsLoading(false);
-    } catch (error) {
-      setError(error);
-      setIsLoading(false);
-      console.error('Error in fetching data:', error);
-    }
+    // try {
+    //   let result = await fetch('https://haircare.onrender.com/getshopdata');
+    //   if (!result.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+    //   let data = await result.json();
+    //   // Slice the first 5 items from the data
+    //   let first5Items = data.slice(0, 6);
+    //   setData(first5Items);
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   setError(error);
+    //   setIsLoading(false);
+    //   console.error('Error in fetching data:', error);
+    // }
   };
 
   const [search, setsearch] = useState('');
@@ -56,27 +55,47 @@ export default function Cushome() {
       </View>
       <View style={styles.main}>
         <View style={styles.entername}>
-          <TextInput placeholder='Search Shop Here' style={[styles.searchinput]} onChangeText={(text) => { searchdata(text) }} />
+          <View style={[styles.searchinput]}>
+            <View style={{ flexDirection: "row" }}>
+              <Image
+                source={require('./search.png')}
+                style={styles.searchicon}
+              />
+            </View>
+            <View style={{ marginLeft: 5 }}>
+              <TextInput placeholder='Search Shop Here' onChangeText={(text) => { searchdata(text) }} style={{ fontSize: 18 }} />
+            </View>
+          </View>
         </View>
         <ScrollView style={styles.container}>
-          {isLoading ? (
-            // <Text>Loading...</Text>
-            <ActivityIndicator size={"large"} color={"blue"}  />
-          ) : error ? (
+          {/* {isLoading ? ( */}
+          {/* // <Text>Loading...</Text> */}
+          {/* // <ActivityIndicator size={"large"} color={"blue"}  /> */}
+          {/* ) :  */}
+          {error ? (
             <Text>Error: {error.message}</Text>
-          ) : data && data.length > 0 ? (
-            data.map((item) => (
-              <View key={item._id}>
-                <AccordionItem item={item} name={name} />
-              </View>
-            ))
+          ) : (
+            search.length > 0 ? (
+              data && data.length > 0 ? (
+                data.map((item) => (
+                  <View key={item._id}>
+                    <AccordionItem item={item} name={name} />
+                  </View>
+                ))
+              ) : (
+                <View>
+                  {/* <Text>No data available</Text> */}
+                  <ActivityIndicator size={"large"} color={"blue"}  />
 
-          )
-            : (
-              <Text>No data available</Text>
-            )}
+                </View>
+              )
+            ) : null
+          )}
 
-          {!search && data && isLoading == false ? <Text style={{ textAlign: 'center' }}>& Many More .. </Text> : ''}
+          {/* <View style={{backgroundColor:'red',flex:1}}> */}
+            <Homedesign/>
+          {/* </View> */}
+          {/* {!search && data && isLoading == false ? <Text style={{ textAlign: 'center' }}>& Many More .. </Text> : ''} */}
         </ScrollView>
       </View>
     </View>
@@ -86,13 +105,13 @@ export default function Cushome() {
 
 
 const AccordionItem = ({ item, name }) => {
-  const navigation=useNavigation();
-  const toshopdata=()=>{
-    if(name === ''){
-       ToastAndroid.show("Enter Name :)",ToastAndroid.TOP);
-       return;
+  const navigation = useNavigation();
+  const toshopdata = () => {
+    if (name === '') {
+      ToastAndroid.show("Enter Name :)", ToastAndroid.TOP);
+      return;
     }
-    navigation.navigate('shopdata',{id:item._id,name:name});
+    navigation.navigate('shopdata', { id: item._id, name: name });
   }
 
   return (
@@ -111,6 +130,10 @@ const AccordionItem = ({ item, name }) => {
               <Text style={{ fontSize: 20 }}>{item.shopname}</Text>
               <Text>Hair cut</Text>
             </View>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <Text style={{ alignSelf: 'flex-end', textAlign: 'right', fontSize: 25, fontWeight: '300', marginRight: 10 }}> {">"} </Text>
+            </View>
+
           </View>
         </TouchableOpacity>
       </View>
@@ -123,14 +146,24 @@ const AccordionItem = ({ item, name }) => {
 
 
 const styles = StyleSheet.create({
+  searchicon: {
+    width: 20,
+    height: 20,
+    marginLeft: 2,
+    marginRight: 2,
+    borderRadius: 8,
+    marginTop: 6,
+    marginBottom: 6,
+    flexDirection: 'row',
+  },
   imageicon: {
     width: 50,
     height: 50,
     marginLeft: 10,
     marginRight: 10,
     borderRadius: 20,
-    marginTop:6,
-    marginBottom:6,
+    marginTop: 6,
+    marginBottom: 6,
 
   },
   shoptitle: {
@@ -141,13 +174,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: 'row',
     overflow: 'hidden',
-    marginBottom:10,
-    borderWidth:0.3,
+    marginBottom: 10,
+    borderWidth: 0.3,
 
   },
   shopdatamain: {
     alignSelf: 'center',
-    flex: 1,
+    // flex: 1,
   },
   textinput: {
     backgroundColor: '#2C3E50',
@@ -164,17 +197,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchinput: {
-    fontSize: 20,
+    fontSize: 25,
     color: 'black',
     width: 280,
+    height: 50,
     borderWidth: 2,
     padding: 7,
-    paddingLeft: 20,
+    paddingLeft: 7,
     borderRadius: 10,
     marginTop: 20,
     textAlignVertical: "center",
     backgroundColor: 'white',
-    borderColor: '#3498DB'
+    borderColor: '#3498DB',
+    flexDirection: 'row',
+    marginBottom:10,
   },
   main: {
     backgroundColor: '#D0ECE7',

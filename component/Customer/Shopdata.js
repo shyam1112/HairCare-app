@@ -71,7 +71,7 @@ const ShopItem = ({ item, name }) => {
       if (response.ok) {
         const data = await response.json();
         idd = data.id;
-        ToastAndroid.show('Request sent Successfully...done 😃!', ToastAndroid.TOP);
+        ToastAndroid.show('Request sent Successfully...😃!', ToastAndroid.TOP);
         setRequestSent(true);
         setRsp('Confirm');
       } else {
@@ -136,7 +136,7 @@ const ShopItem = ({ item, name }) => {
           <Text style={shopitem.textlabel}><Text style={{ fontWeight: '700' }}>Address :</Text> {item.address}</Text>
 
           <View>
-              <Text style={{ fontWeight: '700',marginTop:10,fontSize:16 }}>Select Time:</Text>
+              <Text style={{ fontWeight: '700',marginTop:10,fontSize:16 }}>Select Time :</Text>
               
 
               <View style={shopitem.dropdownContainer}>
@@ -184,7 +184,7 @@ const ShopItem = ({ item, name }) => {
               </View>
 
               <Text style={{fontSize:16}}>
-                Selected Time: {selectedHour}:{selectedMinute} {selectedAmPm}
+                Selected Time : <Text style={{fontWeight:'800'}}>{selectedHour}:{selectedMinute} {selectedAmPm}</Text>
               </Text>
           </View>
         </View>
@@ -214,7 +214,10 @@ const ShopItem = ({ item, name }) => {
                 </View>
               </Pressable>) : ""}
             {rsp === 'Confirm' ? (
+              <View>
               <Text style={{ backgroundColor: 'green', borderRadius: 10, color: 'white', fontWeight: '600', width: 250, textAlign: 'center', height: 40, textAlignVertical: 'center', marginTop: 10 }}>Confirm</Text>
+              <Text style={{marginTop:3,textAlign:'center'}}>Your slot is Confirmed.</Text>
+              </View>
             ) : ''}
 
 

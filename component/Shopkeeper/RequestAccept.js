@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ToastAndroid, Pressable, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid, Pressable, ScrollView, Button,ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
@@ -13,7 +13,6 @@ Notifications.setNotificationHandler({
 })
 
 export default function RequestAccept() {
-
   const triggerNotifications = async () => {
 
     const { granted } = await Notifications.requestPermissionsAsync();
@@ -22,7 +21,7 @@ export default function RequestAccept() {
         content: {
           title: "You've Got a Request! 📬",
           body: "Act quickly and choose a suitable time to accept the request!",
-          sound: 'default',
+          sounds: 'default',
           data: { data: "goes here" },
         },
         trigger: null,
@@ -49,8 +48,8 @@ export default function RequestAccept() {
   }, []);
   
   useEffect(() => {
-    if (hasStartedPolling  && data.length > lastDataLength) {
-      console.log('added...');
+    if (data.length > lastDataLength) {
+      // console.log('added...');
       triggerNotifications();
       setLastDataLength(data.length);
     }
@@ -83,9 +82,6 @@ export default function RequestAccept() {
   };
 
 
-
-
-
   const acceptreq = async (id) => {
     try {
       let result = await fetch(`https://haircare.onrender.com/update/${id}`, {
@@ -106,7 +102,7 @@ export default function RequestAccept() {
 
   const deletereq = async (id) => {
     try {
-      setLastDataLength(data.length-1); 
+      setLastDataLength(data.length); 
       let result = await fetch(`https://haircare.onrender.com/deletereq/${id}`, {
         method: 'delete'
       });
@@ -124,7 +120,7 @@ export default function RequestAccept() {
     <View style={styles.container}>
       <ScrollView>
         {isLoading ? (
-          <Text>Loading...</Text>
+          <ActivityIndicator size={"large"} color={"blue"}  />
         ) : error ? (
           <Text>Error: {error.message}</Text>
         ) :
@@ -135,8 +131,8 @@ export default function RequestAccept() {
               <View style={styles.boxmain} key={item._id}>
                 <View style={styles.textt}>
                   <Text style={styles.name} >{item.name}</Text>
-                  <Text style={styles.name} >{data.length}</Text>
-                  <Text style={styles.name} >{lastDataLength}</Text>
+                  {/* <Text style={styles.name} >{data.length}</Text> */}
+                  {/* <Text style={styles.name} >{lastDataLength}</Text> */}
                   <Text style={styles.time}>{item.timee}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>

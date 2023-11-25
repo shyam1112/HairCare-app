@@ -11,6 +11,7 @@ import AddData from './component/Shopkeeper/AddData';
 import RequestAccept from './component/Shopkeeper/RequestAccept';
 import Profile from './component/Shopkeeper/Profile';
 import Shopdata from './component/Customer/Shopdata';
+import Forgotpass from './component/Shopkeeper/Forgotpass';
 
 
 const Stack = createNativeStackNavigator();
@@ -48,14 +49,14 @@ export default function App() {
           name="cushome"
           component={Cushome}
           options={{
-            title: 'Trim Time - Customer',
+            title: 'TrimTime - Customer',
           }}
         />
         <Stack.Screen
           name="shoplogin"
           component={Shoplogin}
           options={{
-            title: 'Trim Time - Login',
+            title: 'TrimTime - Login',
           }}
         />
         <Stack.Screen
@@ -63,19 +64,26 @@ export default function App() {
           component={Shophome}
           
           options={() => ({
-            title: 'Trim Time - Home',
+            title: 'TrimTime - Home',
           })}
         />
         <Stack.Screen
           name="shopregi"
           component={Shopregistration}
           options={{
-            title: 'Trim Time - Registration',
+            title: 'TrimTime - Registration',
           }}
         />
         <Stack.Screen
           name="shopdata"
           component={Shopdata}
+          options={{
+            title: 'Barber Shop',
+          }}
+        />
+         <Stack.Screen
+          name="forgotpassword"
+          component={Forgotpass}
           options={{
             title: 'Barber Shop',
           }}
