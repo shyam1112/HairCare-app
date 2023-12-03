@@ -3,6 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, ActivityIndicator, ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Homedesign from './Homedesign';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 export default function Cushome() {
   const [name, setName] = useState('');
@@ -85,7 +86,7 @@ export default function Cushome() {
               ) : (
                 <View>
                   {/* <Text>No data available</Text> */}
-                  <ActivityIndicator size={"large"} color={"blue"}  />
+                  <ActivityIndicator size={"large"} color={"blue"} />
 
                 </View>
               )
@@ -93,7 +94,7 @@ export default function Cushome() {
           )}
 
           {/* <View style={{backgroundColor:'red',flex:1}}> */}
-            <Homedesign/>
+          <Homedesign />
           {/* </View> */}
           {/* {!search && data && isLoading == false ? <Text style={{ textAlign: 'center' }}>& Many More .. </Text> : ''} */}
         </ScrollView>
@@ -128,7 +129,15 @@ const AccordionItem = ({ item, name }) => {
             </View>
             <View>
               <Text style={{ fontSize: 20 }}>{item.shopname}</Text>
-              <Text>Hair cut</Text>
+              {/* <Text>Hair cut</Text> */}
+              <AirbnbRating
+                count={5}
+                defaultRating={3}
+                size={15}
+                reviewSize={15}
+                showRating={false}
+                isDisabled
+              />
             </View>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
               <Text style={{ alignSelf: 'flex-end', textAlign: 'right', fontSize: 25, fontWeight: '300', marginRight: 10 }}> {">"} </Text>
@@ -210,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#3498DB',
     flexDirection: 'row',
-    marginBottom:10,
+    marginBottom: 10,
   },
   main: {
     backgroundColor: '#D0ECE7',
